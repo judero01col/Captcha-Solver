@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using Tesseract;
 
-namespace ControleCaptcha
+namespace CaptchaSolverLib
 {
     public partial class Form : System.Windows.Forms.Form
     {

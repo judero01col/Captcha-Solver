@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace ControleCaptcha
+namespace CaptchaSolverLib
 {
     internal static class Program
     {

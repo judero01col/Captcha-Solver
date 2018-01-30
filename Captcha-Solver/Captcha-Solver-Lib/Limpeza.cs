@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace ControleCaptcha
+namespace CaptchaSolverLib
 {
     public static class Limpeza
     {

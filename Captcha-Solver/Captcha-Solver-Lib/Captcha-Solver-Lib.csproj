@@ -7,8 +7,8 @@
     <ProjectGuid>{8C4560DB-57CE-4C1C-83B5-19284DCBCEF8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ControleCaptcha</RootNamespace>
-    <AssemblyName>ControleCaptcha</AssemblyName>
+    <RootNamespace>CaptchaSolverLib</RootNamespace>
+    <AssemblyName>Captcha-Solver-Lib</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>ControleCaptcha.Program</StartupObject>
+    <StartupObject>CaptchaSolverLib.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>img\captcha.ico</ApplicationIcon>

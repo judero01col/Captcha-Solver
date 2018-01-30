@@ -1,4 +1,4 @@
-﻿namespace ControleCaptcha
+﻿namespace CaptchaSolverLib
 {
     partial class Form
     {

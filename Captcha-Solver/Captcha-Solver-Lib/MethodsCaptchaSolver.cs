@@ -1,11 +1,54 @@
-﻿using System.Drawing;
+﻿using AForge.Imaging.Filters;
+using System;
+using System.Drawing;
+using Tesseract;
 
 namespace CaptchaSolverLib
 {
-    public static class Limpeza
+    public class MethodsCaptchaSolver
     {
+        public static string OCR(Bitmap b)
+        {
+            try
+            {
+                string res = string.Empty;
+                string path = $@"{Environment.CurrentDirectory}\tessdata\";
+
+                using (var engine = new TesseractEngine(path, "eng"))
+                {
+                    string letters = "abcdefghijklmnopqrstuvwxyz";
+                    string numbers = "0123456789";
+                    engine.SetVariable("tessedit_char_whitelist", $"{numbers}{letters}{letters.ToUpper()}");
+                    engine.SetVariable("tessedit_unrej_any_wd", true);
+                    engine.SetVariable("tessedit_adapt_to_char_fragments", true);
+                    engine.SetVariable("tessedit_redo_xheight", true);
+                    engine.SetVariable("chop_enable", true);
+                    Bitmap x = b.Clone(new Rectangle(0, 0, b.Width, b.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+                    using (var page = engine.Process(x, PageSegMode.SingleLine))
+                        res = page.GetText().Replace(" ", "").Trim();
+                }
+
+                return res;
+            }
+            catch (Exception ex)
+            {
+                //MessageBox.Show($"Erro: {ex.Message}");
+                return null;
+            }
+        }
+
+        public static Bitmap CopyBitmap(Bitmap source)
+        {
+            return new Bitmap(source);
+        }
+
+        #region Filtros
+
         public static Bitmap TirarBorda(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
                 for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
@@ -35,6 +78,8 @@ namespace CaptchaSolverLib
 
         public static Bitmap TirarBordaTRT21(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
                 for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
@@ -64,6 +109,8 @@ namespace CaptchaSolverLib
 
         public static Bitmap TirarBordaTRF4(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
                 for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
@@ -93,6 +140,8 @@ namespace CaptchaSolverLib
 
         public static Bitmap TirarBordaBaixa(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
                 for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
@@ -113,6 +162,8 @@ namespace CaptchaSolverLib
 
         public static Bitmap TirarBordaCima(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
                 for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
@@ -142,6 +193,8 @@ namespace CaptchaSolverLib
 
         public static void CorrigirTransparencia(Bitmap Imagem, string fileName)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             using (var b = new Bitmap(Imagem.Width, Imagem.Height))
             {
                 b.SetResolution(Imagem.HorizontalResolution, Imagem.VerticalResolution);
@@ -160,6 +213,8 @@ namespace CaptchaSolverLib
 
         public static Bitmap FA_TirarPixelPretoSozinhoNaHorizontal(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
                 for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
@@ -196,6 +251,8 @@ namespace CaptchaSolverLib
 
         public static Bitmap FA_TirarPixelPretoSozinhoNaVertical(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
                 for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
@@ -233,6 +290,8 @@ namespace CaptchaSolverLib
 
         public static Bitmap PintarBrancoEntrePretos(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
             {
                 for (int X = 0; X <= (Imagem.Width) - 1; X++)
@@ -259,6 +318,8 @@ namespace CaptchaSolverLib
 
         public static Bitmap PintarPixelPretoDeBranco(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             Color c = default(Color);
 
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
@@ -282,6 +343,8 @@ namespace CaptchaSolverLib
 
         public static Bitmap PintarPixelPretoDeBranco2(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             Color c = default(Color);
 
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
@@ -305,6 +368,8 @@ namespace CaptchaSolverLib
 
         public static Bitmap engrossarLinhaPreto(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             //engrossa as linhas pretas
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
@@ -329,6 +394,8 @@ namespace CaptchaSolverLib
 
         public static Bitmap TirarPixelSozinho(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
                 for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
@@ -365,20 +432,22 @@ namespace CaptchaSolverLib
             return Imagem;
         }
 
-        public static Bitmap RetirarTodasAsCoresEColocarNaImagemFinal(Bitmap ImagemOriginal)
+        public static Bitmap RetirarTodasAsCoresEColocarNaImagemFinal(Bitmap Imagem)
         {
-            Bitmap ImagemColorida = new Bitmap(ImagemOriginal.Width, ImagemOriginal.Height);
-            Bitmap imagemPreta = new Bitmap(ImagemOriginal.Width, ImagemOriginal.Height);
-            Bitmap imagemFinal = new Bitmap(ImagemOriginal.Width, ImagemOriginal.Height);
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+            Bitmap ImagemColorida = new Bitmap(Imagem.Width, Imagem.Height);
+            Bitmap imagemPreta = new Bitmap(Imagem.Width, Imagem.Height);
+            Bitmap imagemFinal = new Bitmap(Imagem.Width, Imagem.Height);
 
             Color c = default(Color);
 
             //*** BEGIN MULTICOLOR ***
-            for (int X = 0; X <= (ImagemOriginal.Width) - 1; X++)
+            for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
-                for (int Y = 0; Y <= (ImagemOriginal.Height) - 1; Y++)
+                for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
                 {
-                    c = ImagemOriginal.GetPixel(X, Y);
+                    c = Imagem.GetPixel(X, Y);
                     if (((c.R == 0 & c.G == 0 & c.B == 0) | (c.R == 255 & c.G == 255 & c.B == 255)))
                     {
                         ImagemColorida.SetPixel(X, Y, Color.FromArgb(c.A, 255, 255, 255));
@@ -393,11 +462,11 @@ namespace CaptchaSolverLib
             //*** END MULTICOLOR ***
 
             //*** BEGIN BLACK ***
-            for (int X = 0; X <= (ImagemOriginal.Width) - 1; X++)
+            for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
-                for (int Y = 0; Y <= (ImagemOriginal.Height) - 1; Y++)
+                for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
                 {
-                    c = ImagemOriginal.GetPixel(X, Y);
+                    c = Imagem.GetPixel(X, Y);
                     if ((c.R < 10 & c.G < 10 & c.B < 10))
                     {
                         imagemPreta.SetPixel(X, Y, Color.FromArgb(c.A, 0, 0, 0));
@@ -415,9 +484,9 @@ namespace CaptchaSolverLib
 
             Color preto = default(Color);
 
-            for (int X = 0; X <= (ImagemOriginal.Width) - 1; X++)
+            for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
-                for (int Y = 0; Y <= (ImagemOriginal.Height) - 1; Y++)
+                for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
                 {
                     colorido = ImagemColorida.GetPixel(X, Y);
                     preto = imagemPreta.GetPixel(X, Y);
@@ -438,6 +507,8 @@ namespace CaptchaSolverLib
 
         public static Bitmap TirarPixelPretoSozinhoHorizontal(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
                 for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
@@ -472,8 +543,10 @@ namespace CaptchaSolverLib
             return Imagem;
         }
 
-        internal static Bitmap TirarBordaRS(Bitmap Imagem)
+        public static Bitmap TirarBordaRS(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
                 for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
@@ -501,8 +574,10 @@ namespace CaptchaSolverLib
             return Imagem;
         }
 
-        internal static Bitmap PintarPixelPretoDeBrancoTRT17(Bitmap Imagem)
+        public static Bitmap PintarPixelPretoDeBrancoTRT17(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             Color c = default(Color);
 
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
@@ -524,8 +599,10 @@ namespace CaptchaSolverLib
             return Imagem;
         }
 
-        internal static Bitmap Limpar2PX(Bitmap Imagem)
+        public static Bitmap Limpar2PX(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             for (int Y = 10; Y <= (Imagem.Height) - 5; Y++)
             {
                 for (int X = 10; X <= (Imagem.Width) - 5; X++)
@@ -560,8 +637,10 @@ namespace CaptchaSolverLib
             return Imagem;
         }
 
-        internal static Bitmap PegarAzul(Bitmap Imagem)
+        public static Bitmap PegarAzul(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             Color c = default(Color);
 
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
@@ -581,6 +660,8 @@ namespace CaptchaSolverLib
 
         public static Bitmap TirarPixelPretoSozinhoVertical(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
                 for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
@@ -619,6 +700,8 @@ namespace CaptchaSolverLib
 
         public static Bitmap TirarPixelPretoEntreBranco2Horizontal(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
                 for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
@@ -656,6 +739,8 @@ namespace CaptchaSolverLib
 
         public static Bitmap TirarPixelPretoEntreBranco3Horizontal(Bitmap Imagem)
         {
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
             for (int X = 0; X <= (Imagem.Width) - 1; X++)
             {
                 for (int Y = 0; Y <= (Imagem.Height) - 1; Y++)
@@ -692,20 +777,190 @@ namespace CaptchaSolverLib
             return Imagem;
         }
 
-        internal static Bitmap RetirarBolinha(Bitmap atual)
+        public static Bitmap RetirarBolinha(Bitmap Imagem)
         {
-            for (int X = 0; X <= (atual.Width) - 2; X++)
+            Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+
+            for (int X = 0; X <= (Imagem.Width) - 2; X++)
             {
-                for (int Y = 0; Y <= (atual.Height) - 2; Y++)
+                for (int Y = 0; Y <= (Imagem.Height) - 2; Y++)
                 {
                     if (X >= 10 && X <= 16 && Y >= 8 && Y <= 13)
                     {
-                        Color C = atual.GetPixel(X, Y);
-                        atual.SetPixel(X, Y, Color.FromArgb(C.A, 255, 255, 255));
+                        Color C = Imagem.GetPixel(X, Y);
+                        Imagem.SetPixel(X, Y, Color.FromArgb(C.A, 255, 255, 255));
                     }
                 }
             }
-            return atual;
+            return Imagem;
         }
+
+        #endregion
+
+        #region  Filtros AForge
+
+        public static Bitmap Blur(Bitmap Imagem)
+        {
+            Blur filter = new Blur();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap BrightnessCorrection(Bitmap Imagem)
+        {
+            BrightnessCorrection filter = new BrightnessCorrection();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap ContrastCorrection(Bitmap Imagem)
+        {
+            ContrastCorrection filter = new ContrastCorrection();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap SaturationCorrection(Bitmap Imagem)
+        {
+            SaturationCorrection filter = new SaturationCorrection();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap Closing(Bitmap Imagem)
+        {
+            Closing filter = new Closing();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap Dilatation(Bitmap Imagem)
+        {
+            Dilatation filter = new Dilatation();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap Erosion(Bitmap Imagem)
+        {
+            Erosion filter = new Erosion();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap BlobsFiltering(Bitmap Imagem)
+        {
+            BlobsFiltering filter = new BlobsFiltering();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap Median2(Bitmap Imagem)
+        {
+            Median filter = new Median(2);
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+        
+        public static Bitmap Opening(Bitmap Imagem)
+        {
+            Opening filter = new Opening();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap Mean(Bitmap Imagem)
+        {
+            Mean filter = new Mean();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap BilateralSmoothing(Bitmap Imagem)
+        {
+            BilateralSmoothing filter = new BilateralSmoothing();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap Invert(Bitmap Imagem)
+        {
+            Invert filter = new Invert();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap Convolution(Bitmap Imagem, int[,] kernel)
+        {
+            Convolution filter = new Convolution(kernel);
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap Convolution(Bitmap Imagem, int[,] kernel, int divisor)
+        {
+            Convolution filter = new Convolution(kernel, divisor);
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap GaussianSharpen(Bitmap Imagem)
+        {
+            GaussianSharpen filter = new GaussianSharpen();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap Median(Bitmap Imagem)
+        {
+            Median filter = new Median();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap Sharpen(Bitmap Imagem)
+        {
+            Sharpen filter = new Sharpen();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap ResizeNearestNeighbor(Bitmap Imagem, int newWidth, int newHeight)
+        {
+            ResizeNearestNeighbor filter = new ResizeNearestNeighbor(newWidth, newHeight);
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        public static Bitmap Shrink(Bitmap Imagem)
+        {
+            Shrink filter = new Shrink();
+            Imagem = Imagem.Clone(new Rectangle(0, 0, Imagem.Width, Imagem.Height), System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            Imagem = filter.Apply(Imagem);
+            return Imagem;
+        }
+
+        
+
+        #endregion
     }
 }

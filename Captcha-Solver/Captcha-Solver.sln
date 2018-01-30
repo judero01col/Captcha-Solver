@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LimpezaCaptcha", "ControleCaptcha\LimpezaCaptcha.csproj", "{8C4560DB-57CE-4C1C-83B5-19284DCBCEF8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Captcha-Solver", "ControleCaptcha\Captcha-Solver.csproj", "{8C4560DB-57CE-4C1C-83B5-19284DCBCEF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
